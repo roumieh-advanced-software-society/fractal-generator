@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import multiprocess as mp
 import time
 import numpy as np
-import tqdm   # For the progress bar, no idea what is stands for
+import tqdm
 import cmath  # Complex math library
 from math import sqrt
 
