@@ -8,16 +8,25 @@ import cmath  # Complex math library
 from math import sqrt
 
 
-def canvas(n, m, filling=(0, 0, 0)):
-    """
-    USE IS NOT RECOMMENDED BECAUSE OF HELLISH MEMORY BEHAVIOR
-    JUST DON'T DO IT. BE MERCIFUL ON THE RAM.
-
-    Construct an n * m canvas filled with n * m pixels
-    (m columns, n rows)
-    whose color is specified in RGB by the 'filling' list.
-    Default is black (0,0,0)"""
-    return [[filling for _ in range(0, m)] for _ in range(0, n)]
+def get_size(obj, seen=None):
+    """Recursively finds size of objects"""
+    size = sys.getsizeof(obj)
+    if seen is None:
+        seen = set()
+    obj_id = id(obj)
+    if obj_id in seen:
+        return 0
+    # Important mark as seen *before* entering recursion to gracefully handle
+    # self-referential objects
+    seen.add(obj_id)
+    if isinstance(obj, dict):
+        size += sum([get_size(v, seen) for v in obj.values()])
+        size += sum([get_size(k, seen) for k in obj.keys()])
+    elif hasattr(obj, '__dict__'):
+        size += get_size(obj.__dict__, seen)
+    elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
+        size += sum([get_size(i, seen) for i in obj])
+    return size
 
 
 def canvas2point(row, column, canvas_size, center, zoom):
@@ -65,7 +74,7 @@ def empty_canvas(canvas_size):
     values as int8 (C-like array) which means that a limit of more than
     127 is not allowed!
     canvas_size = (# of rows, # of columns)"""
-    return [np.array([0 for _ in range(0, canvas_size[1])], dtype='int8') for _ in range(0, canvas_size[0])]
+    return np.zeros(canvas_size, dtype="int8")
 
 
 def mandel(canvas_size=(100, 100), limit=30, center=(0.5, 0), zoom=1, used_function=f, dpi=300):
@@ -73,7 +82,9 @@ def mandel(canvas_size=(100, 100), limit=30, center=(0.5, 0), zoom=1, used_funct
     """This is the main function that will draw the image
     Format of canvas_size: (# of rows, # of columns)
     Format of center: (x coordinate, y coordinate)"""
-    image = empty_canvas(canvas_size)  # Create a canvas to draw on
+    #image = empty_canvas(canvas_size)  # Create a canvas to draw on
+
+
     # TODO: Modify the 'image' variable directly instead of creating a return value and then putting it in image to
     # save memory. (Should cut the usage by half, theoretically)
 
