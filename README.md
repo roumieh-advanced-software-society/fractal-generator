@@ -6,16 +6,16 @@ This simple program will generate a fractal image when it's run. It is very prim
 It features the following:
 - The ability to choose any complex function to be used for generation
 - The ability to choose any point as a center for the image (thus scrolling through the complex plane)
-- The ability to change zoom (thus exploring in 'depth')
+- The ability to change zoom (thus exploring 'in-depth')
 - A progress bar to show the current progress of the calculations
 - Parallelization to speed up the processing
 
 ## Improvements needed
 
 This program is currently very crude and weak. It can probably get much better improvement. Particularily in the following areas:
-- Faster and cleaner image saving
-- Automatic 'chuck_size' setting for best performance
-- Improvement in the image drawing mechanism (probably replacing matplotlib with something more specialized for images)
+- Correct handling of non-square images
+- Automatic 'chunck_size' setting for best performance
+- A better-looking color palette
 
 as well as other neglected areas
 
